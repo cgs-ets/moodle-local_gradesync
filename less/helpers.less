@@ -1,0 +1,39 @@
+/* Helpers */
+#local_gradesync-map-root {
+    .spinner {
+        display: none;
+        padding: 0;
+        width: 30px;
+    }
+    .spinner .circle {
+        display: block;
+        position: relative;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 1px solid transparent;
+        border-top-color: #000;
+        border-left-color: #000;
+        text-indent: -9999px;
+        margin: 0 auto;
+    }
+
+    .spin {
+        -webkit-animation: lgsspin 0.4s linear 0s infinite;
+           -moz-animation: lgsspin 0.4s linear 0s infinite;
+             -o-animation: lgsspin 0.4s linear 0s infinite;
+                animation: lgsspin 0.4s linear 0s infinite;
+    }
+    @-webkit-keyframes lgsspin {
+        from { -webkit-transform: rotate(0deg); }
+        to { -webkit-transform: rotate(360deg); }
+    }
+    @-moz-keyframes lgsspin {
+        from { -moz-transform: rotate(0deg); }
+        to { -moz-transform: rotate(360deg); }
+    }
+    @keyframes lgsspin {
+        from {transform:rotate(0deg);}
+        to {transform:rotate(360deg);}
+    }
+}

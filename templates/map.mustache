@@ -1,0 +1,66 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+    @package   local_gradesync
+    @copyright 2020 Michael Vangelovski <michael.vangelovski@hotmail.com>
+    @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+}}
+{{!
+    @template local_gradesync/map
+
+    Gradesync Map template.
+}}
+
+<div id="local_gradesync-map-root" class="loading">
+    <div class="classes">
+        {{#is_multiple_classes}}
+            <h5>{{#str}} map:assessmentclasses, local_gradesync, {{config.extsystem}} {{/str}}</h5>
+            <select id="assessment-class">
+                {{#classes}}
+                    <option value="{{.}}">{{.}}</option>
+                {{/classes}}
+            </select>
+        {{/is_multiple_classes}}
+        {{^is_multiple_classes}}
+            <input type="hidden" value="{{#classes}}{{.}}{{/classes}}" />
+        {{/is_multiple_classes}}
+    </div>
+    <div class="mappings">
+        <div class="mapping-title">
+            <h5>{{#str}} map:mappingtitle, local_gradesync {{/str}}</h5>
+            <div class="spinner"><div class="circle spin"></div></div>
+        </div>
+        <div class="assessments">
+            {{#assessments}}
+                <div class="assessment" data-id="{{id}}" data-class="{{class}}">
+                    <div class="info">
+                        <span>{{description1}}</span>
+                        <span>{{description2}}</span>
+                        <span>{{description3}}</span>
+                    </div>
+                    <div class="selection">
+                        <select class="gradeitems">
+                            <option value=""></option>
+                            {{#gradeitems}}
+                                <option value="{{id}}">{{itemname}}</option>
+                            {{/gradeitems}}
+                        </select>
+                    </div>
+                </div>
+            {{/assessments}}
+        </div>
+    </div>
+</div>

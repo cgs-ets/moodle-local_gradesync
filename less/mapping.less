@@ -1,0 +1,109 @@
+#local_gradesync-map-root {
+	padding: 20px 10px;
+	.spinner {
+		display: none;
+	}
+	.classes {
+    	margin-bottom: 30px;
+	}
+	.mappings {
+	    border: 1px solid #ccc;
+	    .mapping-title {
+    		background-color: #f2f4f6;
+    		padding: 10px;
+    		position: relative;
+    		h5 {
+    			margin: 0;
+    		}
+    		.spinner {
+	    		right: 12px;
+			    position: absolute;
+			    top: 12px;
+			    .circle {
+			    	width: 25px;
+    				height: 25px;
+			    }
+    		}
+		}
+		.assessments {
+    		border-top: 1px solid #ccc;
+		}
+		.assessment {
+			overflow: hidden;
+			&:nth-child(even) {
+				background: #f2f6ff; /*#f2f4f6;*/
+			}
+			&:nth-child(odd) {
+				background: #fff;
+			}
+			.info {
+				padding: 10px 10px 0;
+			    span {
+			    	display: inline-block;
+    				margin-right: 7px;
+			    }
+			}
+			.selection {
+				padding: 10px;
+			}
+			.spinner {
+				display: block;
+			}
+		}
+	}
+	@media only screen and (min-width: 1300px) {
+		.mappings {
+			.assessment {
+				.info {
+					display: table;
+					padding: 5px 12px;
+				    width: 50%;
+					float: left;
+				    span {
+				    	width: 30%;
+    					margin-right: 0;
+    					height: 2.4rem;
+    					display: table-cell;
+    					vertical-align: middle;
+				    }
+				}
+				.selection {
+					padding: 5px;
+					width: 50%;
+					float: left;
+				}
+			}
+		}
+	}
+
+	&.loading {
+		.assessments {
+			display: none;
+		}
+		.mapping-title > .spinner {
+			display: block;
+		}
+	}
+
+	/* General form styles for this UI */
+	select {
+	    display: block;
+	    width: auto;
+	    height: 2.4rem;
+	    padding: .375rem .75rem;
+	    font-size: .9375rem;
+	    font-weight: 400;
+	    line-height: 1.5;
+	    color: #495057;
+	    background-color: #fff;
+	    -webkit-background-clip: padding-box;
+	    background-clip: padding-box;
+	    border: 1px solid #ced4da;
+	    border-radius: 0;
+	    -webkit-transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+	    -o-transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+	    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+	}
+
+}
+

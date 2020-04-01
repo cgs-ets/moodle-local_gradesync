@@ -1,0 +1,148 @@
+/* Helpers */
+#local_gradesync-map-root .spinner {
+  display: none;
+  padding: 0;
+  width: 30px;
+}
+#local_gradesync-map-root .spinner .circle {
+  display: block;
+  position: relative;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  border-top-color: #000;
+  border-left-color: #000;
+  text-indent: -9999px;
+  margin: 0 auto;
+}
+#local_gradesync-map-root .spin {
+  -webkit-animation: lgsspin 0.4s linear 0s infinite;
+  -moz-animation: lgsspin 0.4s linear 0s infinite;
+  -o-animation: lgsspin 0.4s linear 0s infinite;
+  animation: lgsspin 0.4s linear 0s infinite;
+}
+@-webkit-keyframes lgsspin {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@-moz-keyframes lgsspin {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
+@keyframes lgsspin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+#local_gradesync-map-root {
+  padding: 20px 10px;
+  /* General form styles for this UI */
+}
+#local_gradesync-map-root .spinner {
+  display: none;
+}
+#local_gradesync-map-root .classes {
+  margin-bottom: 30px;
+}
+#local_gradesync-map-root .mappings {
+  border: 1px solid #ccc;
+}
+#local_gradesync-map-root .mappings .mapping-title {
+  background-color: #f2f4f6;
+  padding: 10px;
+  position: relative;
+}
+#local_gradesync-map-root .mappings .mapping-title h5 {
+  margin: 0;
+}
+#local_gradesync-map-root .mappings .mapping-title .spinner {
+  right: 12px;
+  position: absolute;
+  top: 12px;
+}
+#local_gradesync-map-root .mappings .mapping-title .spinner .circle {
+  width: 25px;
+  height: 25px;
+}
+#local_gradesync-map-root .mappings .assessments {
+  border-top: 1px solid #ccc;
+}
+#local_gradesync-map-root .mappings .assessment {
+  overflow: hidden;
+}
+#local_gradesync-map-root .mappings .assessment:nth-child(even) {
+  background: #f2f6ff;
+  /*#f2f4f6;*/
+}
+#local_gradesync-map-root .mappings .assessment:nth-child(odd) {
+  background: #fff;
+}
+#local_gradesync-map-root .mappings .assessment .info {
+  padding: 10px 10px 0;
+}
+#local_gradesync-map-root .mappings .assessment .info span {
+  display: inline-block;
+  margin-right: 7px;
+}
+#local_gradesync-map-root .mappings .assessment .selection {
+  padding: 10px;
+}
+#local_gradesync-map-root .mappings .assessment .spinner {
+  display: block;
+}
+@media only screen and (min-width: 1300px) {
+  #local_gradesync-map-root .mappings .assessment .info {
+    display: table;
+    padding: 5px 12px;
+    width: 50%;
+    float: left;
+  }
+  #local_gradesync-map-root .mappings .assessment .info span {
+    width: 30%;
+    margin-right: 0;
+    height: 2.4rem;
+    display: table-cell;
+    vertical-align: middle;
+  }
+  #local_gradesync-map-root .mappings .assessment .selection {
+    padding: 5px;
+    width: 50%;
+    float: left;
+  }
+}
+#local_gradesync-map-root.loading .assessments {
+  display: none;
+}
+#local_gradesync-map-root.loading .mapping-title > .spinner {
+  display: block;
+}
+#local_gradesync-map-root select {
+  display: block;
+  width: auto;
+  height: 2.4rem;
+  padding: .375rem .75rem;
+  font-size: .9375rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0;
+  -webkit-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  -o-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
