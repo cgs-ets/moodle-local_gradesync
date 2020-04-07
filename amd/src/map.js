@@ -25,14 +25,14 @@
 /**
  * @module local_gradesync/map
  */
-define(['jquery', 'core/log'], 
-    function($, Log) {    
+define(['jquery', 'core/log', 'core/ajax'], 
+    function($, Log, Ajax) {    
     'use strict';
 
     /**
      * Initializes the map component.
      */
-    function init() {
+    function init(courseid) {
         Log.debug('local_gradesync/map: initializing');
 
         var rootel = $('#local_gradesync-map-root');
@@ -42,10 +42,9 @@ define(['jquery', 'core/log'],
             return;
         }
 
-        var map = new Map(rootel);
+        var map = new Map(rootel, courseid);
         map.main();
     }
-
 
     /**
      * The constructor
@@ -53,9 +52,10 @@ define(['jquery', 'core/log'],
      * @constructor
      * @param {jQuery} rootel
      */
-    function Map(rootel) {
+    function Map(rootel, courseid) {
         var self = this;
         self.rootel = rootel;
+        self.courseid = courseid;
     }
 
     /**
@@ -65,13 +65,15 @@ define(['jquery', 'core/log'],
     Map.prototype.main = function () {
         var self = this;
 
-        // Initialise mapping fields.
-        self.layout();
+        // Initialise UI.
+        self.changeClass();
+        self.changeOverrideGroup();
+        self.initMappedTo();
 
         // Detect class change.
         self.rootel.on('change', '#assessment-class', function(e) {
             e.preventDefault();
-            self.layout();
+            self.changeClass();
         });
 
         // Detect mapping change.
@@ -81,24 +83,68 @@ define(['jquery', 'core/log'],
             self.saveMapping(select);
         });
 
+        // Detect group override change.
+        self.rootel.on('change', '#override-group', function(e) {
+            e.preventDefault();
+            self.changeOverrideGroup();
+        });
+
     };
 
     /**
-     * Load the mapping layout.
+     * Load the mapping fields based on selected class.
      *
      */
-    Map.prototype.layout = function () {
+    Map.prototype.changeClass = function () {
         var self = this;
 
-        self.loading();
-
         // Hide/show the relevant class mappings.
-        var aclass = $('#assessment-class').val();
-        $('.assessment').hide();
-        $('.assessment[data-class="' + aclass + '"]').show();
-
-        self.loading(1);
+        self.loading(self.rootel);
+        self.rootel.find('.mappings-wrap').hide();
+        self.rootel.find('.assessment').hide();
+        var aclass = self.rootel.find('#assessment-class').val();
+        if (aclass && aclass != -1) {
+            self.rootel.find('.assessment[data-class="' + aclass + '"]').show();
+            self.rootel.find('.mappings-wrap').show();
+        }
+        self.loading(self.rootel, 1);
+        // Reload group mappings.
+        self.changeOverrideGroup();
     };
+
+    /**
+     * Load the mapping fields based on selected group.
+     *
+     */
+    Map.prototype.changeOverrideGroup = function () {
+        var self = this;
+
+        // Hide/show the relevant group mappings.
+        var areael = $('.overrides');
+        self.loading(areael);
+        self.rootel.find('.overrides .mappings').hide();
+        self.rootel.find('.overrides .assessment').hide();
+        var aclass = self.rootel.find('#assessment-class').val();
+        var groupid = self.rootel.find('#override-group').val();
+        if (aclass && groupid && aclass != -1 && groupid != -1) {
+            self.rootel.find('.overrides .assessment[data-groupid="' + groupid + '"][data-class="' + aclass + '"]').show();
+            self.rootel.find('.overrides .mappings').show();
+        }
+        self.loading(areael, 1);
+    };
+
+    /**
+     * Initialise the selected mappings.
+     *
+     */
+    Map.prototype.initMappedTo = function () {
+        var self = this;
+
+        self.rootel.find('.assessment').each(function() {
+            var mappedto = $(this).data('mappedto');
+            $(this).find('.gradeitems').val(mappedto).change();
+        });
+    };        
 
     /**
      * Load the mapping layout.
@@ -111,46 +157,70 @@ define(['jquery', 'core/log'],
 
         self.submitting(assessment);
 
-        var id = select.data('id');
-        var aclass = select.data('class');
-        Log.debug(id);
-        Log.debug(aclass);
+        var assessmentid = assessment.data('id');
+        var assessmentclass = assessment.data('class');
+        var courseid = self.courseid;
+        var groupid = assessment.data('groupid');
+        var gradeitem = select.val();
 
+        Ajax.call([{
+            methodname: 'local_gradesync_save_mapping',
+            args: { 
+                externalclass: assessmentclass,
+                externalgradeid: assessmentid,
+                courseid: courseid,
+                groupid: groupid,
+                gradeitemid: gradeitem
+            },
+            done: function(response) {
+                self.submitting(assessment, 1, 1);
+            },
+            fail: function(reason) {
+                self.submitting(assessment, 1, 2);
+                Log.error('local_gradesync/map: failed to save mapping.');
+                Log.debug(reason);
+            }
+        }]);
 
-        self.submitting(assessment, 1);
     };
 
     /**
-     * Load the mapping layout.
+     * Show/hide the loading state
      *
      */
-    Map.prototype.loading = function (finished) {
+    Map.prototype.loading = function (el, finished) {
         var self = this;
 
         if (finished) {
             setTimeout(function() {
-                self.rootel.removeClass('loading');
+                el.removeClass('loading');
             }, 200);
         } else {
-            self.rootel.addClass('loading');
+            el.addClass('loading');
         }
     };
 
     /**
-     * Load the mapping layout.
+     * Show/hide the submitting state
      *
      */
-    Map.prototype.submitting = function (assessment, finished) {
+    Map.prototype.submitting = function (assessment, finished, result) {
         var self = this;
 
+        var assessmentid = assessment.data('id');
+
         if (finished) {
-            setTimeout(function() {
-                //assessment.find('#submitspinner-' + assessment.data('id')).remove();
-                self.rootel.removeClass('submitting');
-            }, 200);
+            assessment.find('#submitspinner-' + assessmentid).remove();
+            self.rootel.removeClass('submitting');
+            if (result == 1) {
+                assessment.append('<div style="display: none;" id="result-' + assessmentid + '" class="icon-result icon-result-success"><i class="fa fa-check" aria-hidden="true"></i> Changes saved</div>');
+            } else if (result == 2) {
+                assessment.append('<div style="display: none;" id="result-' + assessmentid + '" class="icon-result icon-result-error"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Error saving changes</div>');
+            }
+            assessment.find('#result-' + assessmentid).fadeIn(200).delay(2000).fadeOut(200, function() {$(this).remove()});
         } else {
             self.rootel.addClass('submitting');
-            assessment.append('<div id="submitspinner-' + assessment.data('id') + '" class="spinner"><div class="circle spin"></div></div>');
+            assessment.append('<div id="submitspinner-' + assessmentid + '" class="spinner"><div class="circle spin"></div></div>');
         }
     };
 

@@ -1,56 +1,115 @@
 #local_gradesync-map-root {
 	padding: 20px 10px;
+	color: #000;
 	.spinner {
 		display: none;
+	}
+	.loader-group {
+		position: relative;
+		overflow: hidden;
+		* {
+			float: left;
+		}
+		.spinner {
+			float: left;
+		    top: 5px;
+		    position: relative;
+		    left: 13px;
+		    .circle {
+		    	width: 25px;
+				height: 25px;
+		    }
+		}
 	}
 	.classes {
     	margin-bottom: 30px;
 	}
+	.mappings-wrap {
+		display: none;
+	}
 	.mappings {
-	    border: 1px solid #ccc;
-	    .mapping-title {
-    		background-color: #f2f4f6;
-    		padding: 10px;
-    		position: relative;
-    		h5 {
-    			margin: 0;
-    		}
-    		.spinner {
-	    		right: 12px;
-			    position: absolute;
-			    top: 12px;
-			    .circle {
-			    	width: 25px;
-    				height: 25px;
-			    }
-    		}
+		margin-bottom: 30px;
+		.systems {
+			overflow: hidden;
+			.system {
+	            width: 50%;
+	            display: block;
+	            float: left;
+	            padding: 10px 12px;
+    			text-align: center;
+    			font-weight: 600;
+    			text-transform: uppercase;
+    			font-size: 16px;
+			}
 		}
 		.assessments {
-    		border-top: 1px solid #ccc;
+			border: 1px solid #ccc;
+    		border-top: 0 none;
 		}
 		.assessment {
 			overflow: hidden;
+			position: relative;
+			display: none;
 			&:nth-child(even) {
-				background: #f2f6ff; /*#f2f4f6;*/
+				background: #f2f6ff;
 			}
 			&:nth-child(odd) {
 				background: #fff;
 			}
 			.info {
 				padding: 10px 10px 0;
+				float: left;
 			    span {
 			    	display: inline-block;
     				margin-right: 7px;
 			    }
 			}
 			.selection {
+				display: inline-block;
 				padding: 10px;
+				float: right;
 			}
+			.spinner {
+				display: inline-block;
+			    bottom: 20px;
+			    height: 20px;
+			    width: 20px;
+			    position: absolute;
+			    margin: 0 0 0 10px;
+			}
+			.icon-result {
+			    display: inline-block;
+			    position: absolute;
+			    bottom: 12px;
+    			margin-left: 11px;
+    			font-size: 13px;
+    			i {
+					color: green;
+			    	font-size: 18px;
+    			}
+			}
+			.icon-result-error {
+				i {
+					color: red;
+				}
+			}
+		}
+	}
+	.overrides {
+		&.loading {
 			.spinner {
 				display: block;
 			}
 		}
+		.mappings {
+			display: none;
+			margin-top: 15px;
+			.assessments {
+				border-bottom: 0 none;
+			}
+		}
 	}
+
 	@media only screen and (min-width: 1300px) {
 		.mappings {
 			.assessment {
@@ -58,7 +117,6 @@
 					display: table;
 					padding: 5px 12px;
 				    width: 50%;
-					float: left;
 				    span {
 				    	width: 30%;
     					margin-right: 0;
@@ -68,8 +126,8 @@
 				    }
 				}
 				.selection {
-					padding: 5px;
-					width: 50%;
+					padding: 5px 12px;
+					width: auto;
 					float: left;
 				}
 			}
@@ -77,10 +135,7 @@
 	}
 
 	&.loading {
-		.assessments {
-			display: none;
-		}
-		.mapping-title > .spinner {
+		.classes .spinner {
 			display: block;
 		}
 	}

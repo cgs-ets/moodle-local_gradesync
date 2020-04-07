@@ -7,11 +7,9 @@
     <TABLE NAME="gradesync_mappings" COMMENT="Relationship between grade items in Moodle and Synergetic.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <!-- Synergetic fields -->
-        <FIELD NAME="assessmentcode" TYPE="char" LENGTH="20" NOTNULL="true" SEQUENCE="false"/>
-        <FIELD NAME="synareaseq" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-        <FIELD NAME="resulttype" TYPE="char" LENGTH="20" NOTNULL="true" SEQUENCE="false"/>
-        <FIELD NAME="resultgroup" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false"/>
+        <!-- External course/grade fields -->
+        <FIELD NAME="externalclass" TYPE="char" LENGTH="50" NOTNULL="true"/>
+        <FIELD NAME="externalgradeid" TYPE="char" LENGTH="50" NOTNULL="true"/>
         <!-- Moodle grade item -->
         <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
         <FIELD NAME="groupid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
@@ -21,6 +19,22 @@
         <FIELD NAME="usernamemodified" TYPE="char" LENGTH="100" NOTNULL="true"/>
         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="gradesync_grades" COMMENT="A staging table to store grades based on mappings.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="username" TYPE="char" LENGTH="100" NOTNULL="true"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="groupid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="externalclass" TYPE="char" LENGTH="50" NOTNULL="true"/>
+        <FIELD NAME="externalgradeid" TYPE="char" LENGTH="50" NOTNULL="true"/>
+        <FIELD NAME="rawgrade" TYPE="char" LENGTH="100" NOTNULL="true"/>
+        <FIELD NAME="mappingid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="gradegradesid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

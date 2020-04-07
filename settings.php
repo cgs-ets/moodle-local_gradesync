@@ -28,10 +28,26 @@ if ($hassiteconfig) {
     $settings = new admin_settingpage('local_gradesync', get_string('pluginname', 'local_gradesync'));
     $ADMIN->add('localplugins', $settings);
 
-    // DB user.
+    // External system name
     $name = 'local_gradesync/extsystem';
     $title = get_string('config:extsystem', 'local_gradesync');
     $description = '';
+    $default = '';
+    $setting = new admin_setting_configtext($name, $title, $description, $default);
+    $settings->add($setting);
+
+    // External system css
+    $name = 'local_gradesync/extsystemcss';
+    $title = get_string('config:extsystemcss', 'local_gradesync');
+    $description = get_string('config:extsystemcss_desc', 'local_gradesync');
+    $default = '';
+    $setting = new admin_setting_configtext($name, $title, $description, $default);
+    $settings->add($setting);
+
+    // Moodle css
+    $name = 'local_gradesync/moodlecss';
+    $title = get_string('config:moodlecss', 'local_gradesync');
+    $description = get_string('config:moodlecss_desc', 'local_gradesync');
     $default = '';
     $setting = new admin_setting_configtext($name, $title, $description, $default);
     $settings->add($setting);

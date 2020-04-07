@@ -3,12 +3,13 @@
   display: none;
   padding: 0;
   width: 30px;
+  overflow: hidden;
 }
 #local_gradesync-map-root .spinner .circle {
   display: block;
   position: relative;
-  width: 30px;
-  height: 30px;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   border: 1px solid transparent;
   border-top-color: #000;
@@ -48,66 +49,116 @@
 }
 #local_gradesync-map-root {
   padding: 20px 10px;
+  color: #000;
   /* General form styles for this UI */
 }
 #local_gradesync-map-root .spinner {
   display: none;
 }
-#local_gradesync-map-root .classes {
-  margin-bottom: 30px;
-}
-#local_gradesync-map-root .mappings {
-  border: 1px solid #ccc;
-}
-#local_gradesync-map-root .mappings .mapping-title {
-  background-color: #f2f4f6;
-  padding: 10px;
+#local_gradesync-map-root .loader-group {
   position: relative;
+  overflow: hidden;
 }
-#local_gradesync-map-root .mappings .mapping-title h5 {
-  margin: 0;
+#local_gradesync-map-root .loader-group * {
+  float: left;
 }
-#local_gradesync-map-root .mappings .mapping-title .spinner {
-  right: 12px;
-  position: absolute;
-  top: 12px;
+#local_gradesync-map-root .loader-group .spinner {
+  float: left;
+  top: 5px;
+  position: relative;
+  left: 13px;
 }
-#local_gradesync-map-root .mappings .mapping-title .spinner .circle {
+#local_gradesync-map-root .loader-group .spinner .circle {
   width: 25px;
   height: 25px;
 }
+#local_gradesync-map-root .classes {
+  margin-bottom: 30px;
+}
+#local_gradesync-map-root .mappings-wrap {
+  display: none;
+}
+#local_gradesync-map-root .mappings {
+  margin-bottom: 30px;
+}
+#local_gradesync-map-root .mappings .systems {
+  overflow: hidden;
+}
+#local_gradesync-map-root .mappings .systems .system {
+  width: 50%;
+  display: block;
+  float: left;
+  padding: 10px 12px;
+  text-align: center;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 16px;
+}
 #local_gradesync-map-root .mappings .assessments {
-  border-top: 1px solid #ccc;
+  border: 1px solid #ccc;
+  border-top: 0 none;
 }
 #local_gradesync-map-root .mappings .assessment {
   overflow: hidden;
+  position: relative;
+  display: none;
 }
 #local_gradesync-map-root .mappings .assessment:nth-child(even) {
   background: #f2f6ff;
-  /*#f2f4f6;*/
 }
 #local_gradesync-map-root .mappings .assessment:nth-child(odd) {
   background: #fff;
 }
 #local_gradesync-map-root .mappings .assessment .info {
   padding: 10px 10px 0;
+  float: left;
 }
 #local_gradesync-map-root .mappings .assessment .info span {
   display: inline-block;
   margin-right: 7px;
 }
 #local_gradesync-map-root .mappings .assessment .selection {
+  display: inline-block;
   padding: 10px;
+  float: right;
 }
 #local_gradesync-map-root .mappings .assessment .spinner {
+  display: inline-block;
+  bottom: 20px;
+  height: 20px;
+  width: 20px;
+  position: absolute;
+  margin: 0 0 0 10px;
+}
+#local_gradesync-map-root .mappings .assessment .icon-result {
+  display: inline-block;
+  position: absolute;
+  bottom: 12px;
+  margin-left: 11px;
+  font-size: 13px;
+}
+#local_gradesync-map-root .mappings .assessment .icon-result i {
+  color: green;
+  font-size: 18px;
+}
+#local_gradesync-map-root .mappings .assessment .icon-result-error i {
+  color: red;
+}
+#local_gradesync-map-root .overrides.loading .spinner {
   display: block;
+}
+#local_gradesync-map-root .overrides .mappings {
+  display: none;
+  margin-top: 15px;
+}
+#local_gradesync-map-root .overrides .mappings .assessments {
+  border-bottom: 0 none;
 }
 @media only screen and (min-width: 1300px) {
   #local_gradesync-map-root .mappings .assessment .info {
     display: table;
     padding: 5px 12px;
     width: 50%;
-    float: left;
   }
   #local_gradesync-map-root .mappings .assessment .info span {
     width: 30%;
@@ -117,15 +168,12 @@
     vertical-align: middle;
   }
   #local_gradesync-map-root .mappings .assessment .selection {
-    padding: 5px;
-    width: 50%;
+    padding: 5px 12px;
+    width: auto;
     float: left;
   }
 }
-#local_gradesync-map-root.loading .assessments {
-  display: none;
-}
-#local_gradesync-map-root.loading .mapping-title > .spinner {
+#local_gradesync-map-root.loading .classes .spinner {
   display: block;
 }
 #local_gradesync-map-root select {

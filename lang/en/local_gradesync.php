@@ -28,7 +28,12 @@ $string['pluginname'] = 'Grade Sync';
 $string['privacy:metadata'] = 'Grade Sync does not store any personal data.';
 $string['grademappings'] = 'Grade Mappings';
 
-$string['config:extsystem'] = 'External System Name';
+$string['config:extsystem'] = 'External system name';
+$string['config:extsystemcss'] = 'External system header CSS';
+$string['config:extsystemcss_desc'] = 'Inline css that will be injected into the style attribute of the system header column on the mapping page.';
+$string['config:moodlecss'] = 'Moodle header CSS';
+$string['config:moodlecss_desc'] = 'Inline css that will be injected into the style attribute of the system header column on the mapping page.';
+
 $string['config:dbtype'] = 'Database driver';
 $string['config:dbtype_desc'] = 'ADOdb database driver name, type of the external database engine.';
 $string['config:dbhost'] = 'Database host';
@@ -43,5 +48,7 @@ $string['missingsettings'] = 'Required settings for local_gradesync are missing.
 
 $string['map:assessmentclasses'] = 'Multiple related classes were found in {$a}. Please select one to begin mapping grade items.';
 $string['map:coursefinalgrade'] = 'Course final grade';
-$string['map:mappingtitle'] = 'Grade mapping';
+$string['map:mappingtitle'] = 'Grade mappings for this course';
+$string['map:overrides'] = 'Override grade mappings for individual classes';
 
+$string['crontask_gradesync'] = 'Sync grades to the staging table';

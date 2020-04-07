@@ -26,41 +26,63 @@
 
 <div id="local_gradesync-map-root" class="loading">
     <div class="classes">
-        {{#is_multiple_classes}}
+        {{#has_multiple_classes}}
             <h5>{{#str}} map:assessmentclasses, local_gradesync, {{config.extsystem}} {{/str}}</h5>
-            <select id="assessment-class">
-                {{#classes}}
-                    <option value="{{.}}">{{.}}</option>
-                {{/classes}}
-            </select>
-        {{/is_multiple_classes}}
-        {{^is_multiple_classes}}
+            <div class="loader-group">
+                <select id="assessment-class">
+                    <option value="-1"></option>
+                    {{#classes}}
+                        <option value="{{.}}">{{.}}</option>
+                    {{/classes}}
+                </select>
+                <div class="spinner"><div class="circle spin"></div></div>
+            </div>
+        {{/has_multiple_classes}}
+        {{^has_multiple_classes}}
             <input type="hidden" value="{{#classes}}{{.}}{{/classes}}" />
-        {{/is_multiple_classes}}
+        {{/has_multiple_classes}}
     </div>
-    <div class="mappings">
-        <div class="mapping-title">
+    <div class="mappings-wrap">
+        <div class="mappings">
+            {{!<hr>}}
             <h5>{{#str}} map:mappingtitle, local_gradesync {{/str}}</h5>
-            <div class="spinner"><div class="circle spin"></div></div>
+            <div class="systems">
+                <div class="system" style="{{config.extsystemcss}}">{{config.extsystem}}</div>
+                <div class="system" style="{{config.moodlecss}}">{{sitename}}</div>
+            </div>
+            <div class="assessments">
+                {{#assessments}}
+                    {{>local_gradesync/assessment}}
+                {{/assessments}}
+            </div>
         </div>
-        <div class="assessments">
-            {{#assessments}}
-                <div class="assessment" data-id="{{id}}" data-class="{{class}}">
-                    <div class="info">
-                        <span>{{description1}}</span>
-                        <span>{{description2}}</span>
-                        <span>{{description3}}</span>
-                    </div>
-                    <div class="selection">
-                        <select class="gradeitems">
-                            <option value=""></option>
-                            {{#gradeitems}}
-                                <option value="{{id}}">{{itemname}}</option>
-                            {{/gradeitems}}
-                        </select>
-                    </div>
+        {{#has_groups}}
+            {{!<hr>}}
+            <div class="overrides">
+                <h5>{{#str}} map:overrides, local_gradesync {{/str}}</h5>
+                <div class="loader-group">
+                    <select id="override-group">
+                        <option value="-1"></option>
+                        {{#groups}}
+                            <option value="{{id}}">{{name}}</option>
+                        {{/groups}}
+                    </select>
+                    <div class="spinner"><div class="circle spin"></div></div>
                 </div>
-            {{/assessments}}
-        </div>
+                <div class="mappings">
+                    <div class="systems">
+                        <div class="system" style="{{config.extsystemcss}}">{{config.extsystem}}</div>
+                        <div class="system" style="{{config.moodlecss}}">{{sitename}}</div>
+                    </div>
+                    {{#groups}}
+                        <div class="assessments group-assessments">
+                            {{#assessments}}
+                                {{>local_gradesync/assessment}}
+                            {{/assessments}}
+                        </div>
+                    {{/groups}}
+                </div>
+            </div>
+        {{/has_groups}}
     </div>
 </div>

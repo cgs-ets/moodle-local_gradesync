@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Mapping page.
+ * Group mapping overrides page.
  *
  * @package   local_gradesync
  * @copyright 2020 Michael Vangelovski <michael.vangelovski@hotmail.com>
@@ -36,10 +36,10 @@ $url = new moodle_url('/local/gradesync/map.php', array('courseid' => $courseid)
 $PAGE->set_context($context);
 $PAGE->set_url($url->out());
 $title = get_string('grademappings', 'local_gradesync');
-$PAGE->set_heading($title);
+$PAGE->set_heading($title . ' (' . $course->fullname . ')') ;
 $PAGE->set_title($SITE->fullname . ': ' . $title);
 $PAGE->navbar->add($course->fullname, new moodle_url('/course/view.php', array('id' => $courseid)));
-$PAGE->navbar->add($title, $url);
+$PAGE->navbar->add($title);
 
 // Ensure user is logged in and has capability to update course.
 require_login();
@@ -84,7 +84,23 @@ $classes = array_column($extassessments, 'class');
 $classes = array_unique($classes);
 sort($classes);
 
-// Get the grade items for this course.
+// Get the current mappings for the course, if available.
+foreach ($extassessments as $i => $assessment) {
+    $extassessments[$i]->mappedto = 0;
+    $extassessments[$i]->groupid = 0;
+    $sql = "SELECT *
+              FROM {gradesync_mappings}
+             WHERE externalclass = ?
+               AND externalgradeid = ?
+               AND courseid = ?
+               AND groupid = 0";
+    $params = array($assessment->class, $assessment->id, $courseid);
+    if ($mapping = $DB->get_record_sql($sql, $params)) {
+        $extassessments[$i]->mappedto = $mapping->gradeitemid;
+    }
+}
+
+// Get the grade items available for this course.
 $gradeitems = array();
 $rs = array_values($DB->get_records('grade_items', array('courseid' => $courseid)));
 foreach ($rs as $gradeitem) {
@@ -100,23 +116,49 @@ foreach ($rs as $gradeitem) {
     }
     $gradeitems[] = (array) $gradeitem;
 }
-//echo "<pre>"; var_export($gradeitems); exit;
+
+// Get the current mappings for individual groups, if available.
+$rs = array_values($DB->get_records('groups', array('courseid' => $course->id)));
+$groups = array();
+foreach ($rs as $group) {
+    $groupassessments = array();
+    foreach ($extassessments as $assessment) {
+        $assessment = (array) $assessment;
+        $assessment['mappedto'] = 0;
+        $assessment['groupid'] = $group->id;
+        $sql = "SELECT *
+                  FROM {gradesync_mappings}
+                 WHERE externalclass = ?
+                   AND externalgradeid = ?
+                   AND courseid = ?
+                   AND groupid = ?";
+        $params = array($assessment['class'], $assessment['id'], $courseid, $group->id);
+        if ($mapping = $DB->get_record_sql($sql, $params)) {
+            $assessment['mappedto'] = $mapping->gradeitemid;
+        }
+        $group->assessments[] = $assessment;
+    }
+    $groups[] = (array) $group;
+}
 
 // Set up the page data.
 $data = array(
     'config' => $config,
-    'is_multiple_classes' => (count($classes) > 1),
+    'sitename' => $SITE->fullname,
+    'has_multiple_classes' => (count($classes) > 1),
     'classes' => $classes,
     'assessments' => $extassessments,
     'gradeitems' => $gradeitems,
+    'has_groups' => (count($groups) > 1),
+    'groups' => $groups,
 );
-//echo "<pre>"; var_export($data); exit;
+//echo "<pre>"; var_export($extassessments); exit;
 
 // Output page template.
 echo $OUTPUT->render_from_template('local_gradesync/map', $data);
 
 // Include page scripts.
-$PAGE->requires->js_call_amd('local_gradesync/map', 'init');
+$PAGE->requires->js_call_amd('local_gradesync/map', 'init', array('courseid' => $courseid));
 
 // Output footer.
 echo $OUTPUT->footer();

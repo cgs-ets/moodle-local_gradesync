@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Grade sync from Moodle to Synergetic.
+ * Grade sync from Moodle to an external Student Information System.
  *
  * @package   local_gradesync
  * @copyright 2020 Michael Vangelovski <michael.vangelovski@hotmail.com>
@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2019090405;
+$plugin->version   = 2019090408;
 $plugin->requires  = 2017111300;
 $plugin->component = 'local_gradesync';
 $plugin->maturity = MATURITY_STABLE;
