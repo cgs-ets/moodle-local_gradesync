@@ -34,6 +34,11 @@ class cron_task_gradesync extends \core\task\scheduled_task {
     use \core\task\logging_trait;
 
     /**
+    * A list of unique courses in the gradesync_mappings table.
+    */
+    protected $mappingcourses = array();
+
+    /**
      * Get a descriptive name for this task (shown to admins).
      *
      * @return string
@@ -50,9 +55,19 @@ class cron_task_gradesync extends \core\task\scheduled_task {
 
         $this->log_start("Starting gradesync.");
 
+        // Get courses that have mappings configured.
+        $sql = "SELECT id, courseid
+                  FROM {gradesync_mappings}";
+        $mappings = $DB->get_records_sql($sql);
+        if (empty($mappings)) {
+            return;
+        }
+        $this->mappingcourses = array_unique(array_column($mappings, 'courseid'));
+
+
         $this->sync_grades();
 
-        $this->cleanup_grades();
+        $this->cleanup_mappings();
         
         $this->log_finish("Done");
 
@@ -65,18 +80,16 @@ class cron_task_gradesync extends \core\task\scheduled_task {
     protected function sync_grades() {
         global $DB;
 
-        // Get courses that have mappings configured.
-        $sql = "SELECT id, courseid
-                  FROM {gradesync_mappings}";
-        $mappings = $DB->get_records_sql($sql);
-        if (empty($mappings)) {
-            return;
-        }
-        $uniquecourses = array_unique(array_column($mappings, 'courseid'));
-
         // Create an adhoc task for each course.
-        foreach ($uniquecourses as $courseid) {
-            if ($course = $DB->get_record('course', array('id' => $courseid))) {
+        foreach ($this->mappingcourses as $courseid) {
+            // Look up the course, skip if not visible or ended.
+            $sql = "SELECT *
+                      FROM {course}
+                     WHERE id = ?
+                       AND visible = 1
+                       AND (enddate = 0 OR enddate > ?)";
+            $params = array($courseid, time());
+            if ($course = $DB->get_record_sql($sql, $params)) {
                 $this->log("Creating adhoc gradesync task for $course->fullname ($course->id)", 1);
                 $task = new \local_gradesync\task\adhoc_task_gradesync();
                 $task->set_custom_data($course->id);
@@ -87,13 +100,50 @@ class cron_task_gradesync extends \core\task\scheduled_task {
     }
 
     /**
-     * Cleanup staging grades table.
+     * Delete mappings where course/group no longer available.
      *
      */
-    protected function cleanup_grades() {
+    protected function cleanup_mappings() {
         global $DB;
 
-        // Delete grades for courses that have been deleted.
+        // Get list of visible and active courseids.
+        $now = time();
+        $sql = "SELECT id
+                  FROM {course}
+                 WHERE visible = 1
+                   AND (enddate = 0 OR enddate > {$now})";
+        $courseids = array_values($DB->get_records_sql($sql));
+        // Determine inactive courses.
+        $activemappings = array_intersect($courseids, $this->mappingcourses);
+        $inactivemappings = array_diff($activemappings, $this->mappingcourses);
+        // Delete inactive mappings.
+        $this->log("Delete mappings for inactive courses: " . implode(', ', $inactivemappings), 2);
+        list($insql, $inparams) = $DB->get_in_or_equal($inactivemappings);
+        $sql = "DELETE FROM {gradesync_mappings} WHERE courseid $insql";
+        $DB->execute($sql, $inparams);
+
+
+        // Get list of viable course groups.
+        list($insql, $inparams) = $DB->get_in_or_equal($courseids);
+        $sql = "SELECT id
+                  FROM {groups}
+                 WHERE courseid $insql";
+        $groupids = array_values($DB->get_records_sql($sql));
+        // Determine inactive groups.
+        $sql = "SELECT id, groupid
+                  FROM {gradesync_mappings}";
+        $mappings = $DB->get_records_sql($sql);
+        if (empty($mappings)) {
+            return;
+        }
+        $mappinggroups = array_unique(array_column($mappings, 'groupid'));
+        $activemappings = array_intersect($groupids, $mappinggroups);
+        $inactivemappings = array_diff($activemappings, $mappinggroups);
+        // Delete inactive mappings.
+        $this->log("Delete mappings for inactive groups: " . implode(', ', $inactivemappings), 2);
+        list($insql, $inparams) = $DB->get_in_or_equal($inactivemappings);
+        $sql = "DELETE FROM {gradesync_mappings} WHERE groupid $insql";
+        $DB->execute($sql, $inparams);
 
     }
 

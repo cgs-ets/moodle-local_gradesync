@@ -36,7 +36,17 @@ class adhoc_task_gradesync extends \core\task\adhoc_task {
     use \core\task\logging_trait;
 
     /**
-     * @var array Mappings to be stored.
+     * @var array The courseid for this task.
+     */
+    protected $courseid = 0;
+
+    /**
+     * @var array Existing staged grades.
+     */
+    protected $existinggrades = array();
+
+    /**
+     * @var array Grades to be stored.
      */
     protected $grades = array();
 
@@ -55,9 +65,9 @@ class adhoc_task_gradesync extends \core\task\adhoc_task {
     public function execute() {
         global $DB;
 
-        $courseid = $this->get_custom_data();
-        $this->log_start("Processing grade sync for course {$courseid}");
-        $course = $DB->get_record('course', array('id' => $courseid));
+        $this->courseid = $this->get_custom_data();
+        $this->log_start("Processing grade sync for course {$this->courseid}");
+        $course = $DB->get_record('course', array('id' => $this->courseid));
         if (empty($course)) {
             $this->log("Error - course record not found.", 1);
             return;
@@ -66,13 +76,13 @@ class adhoc_task_gradesync extends \core\task\adhoc_task {
 
         // Load in all of the existing staged grades for this course.
         $this->log("Caching existing grades for course.", 1);
-        $this->cache_existing_grades($courseid);
+        $this->cache_existing_grades();
 
         // Get the student roleid.
         $studentroleid = $DB->get_field('role', 'id', array('shortname'=> 'student'));
 
         // Get a list of users in this course.
-        $courseuserroles = enrol_get_course_users_roles($courseid);
+        $courseuserroles = enrol_get_course_users_roles($this->courseid);
 
         // Pluck the student ids from the list of enrolments.
         $students = array_filter($courseuserroles, function($userroles) use ($studentroleid) {
@@ -90,7 +100,7 @@ class adhoc_task_gradesync extends \core\task\adhoc_task {
                   FROM {gradesync_mappings}
                  WHERE courseid = ?
                    AND groupid = 0";
-        $params = array($courseid);
+        $params = array($this->courseid);
         $mappings = $DB->get_records_sql($sql, $params);
         foreach ($mappings as $mapping) {
             // Cache each student's grade for this mapping.
@@ -105,7 +115,7 @@ class adhoc_task_gradesync extends \core\task\adhoc_task {
                   FROM {gradesync_mappings}
                  WHERE courseid = ?
                    AND groupid != 0";
-        $params = array($courseid);
+        $params = array($this->courseid);
         $mappings = $DB->get_records_sql($sql, $params);
         foreach ($mappings as $mapping) {
             // Get a list of users in the group.
@@ -131,21 +141,19 @@ class adhoc_task_gradesync extends \core\task\adhoc_task {
     }
 
     /**
-     * Load in all of the existing staged grades for this course.
-     *
-     * @param int courseid
+     * Load in all of the existing staged grades for the course.
      */
-    protected function cache_existing_grades($courseid) {
+    protected function cache_existing_grades() {
         global $DB;
 
         $sql = "SELECT *
                   FROM {gradesync_grades}
                  WHERE courseid = ?";
-        $grades = $DB->get_records_sql($sql, array('courseid' => $courseid));
+        $grades = $DB->get_records_sql($sql, array('courseid' => $this->courseid));
         foreach ($grades as $grade) {
-            $key = $username . '-' . $grade->externalclass . '-' . $grade->externalgradeid;
+            $key = $grade->username . '-' . $grade->externalclass . '-' . $grade->externalgradeid;
             $this->log("Cachning existing grade {$grade->externalclass}/{$grade->externalgradeid} for {$grade->username}", 2);
-            $this->grades[$key] = $grade;
+            $this->existinggrades[$key] = $grade;
         }
     }
 
@@ -175,15 +183,17 @@ class adhoc_task_gradesync extends \core\task\adhoc_task {
         }
 
         $username = $DB->get_field('user', 'username', array('id' => $studentid));
-        $key = $username . '-' . $grade->externalclass . '-' . $grade->externalgradeid;
-        $this->log("Caching grade for {$username} and mapping {$mapping->id}", 2);
+        $key = $username . '-' . $mapping->externalclass . '-' . $mapping->externalgradeid;
+        $this->log("Caching grade {$mapping->externalclass}/{$mapping->externalgradeid} for {$username}", 2);
         $gradeobj = new \stdClass();
-        $gradeobj->mappingid = $mapping->id;
-        $gradeobj->externalclass = $mapping->externalclass;
+        $gradeobj->username        = $username;
+        $gradeobj->courseid        = $mapping->courseid;
+        $gradeobj->groupid         = $mapping->groupid;
+        $gradeobj->mappingid       = $mapping->id;
+        $gradeobj->externalclass   = $mapping->externalclass;
         $gradeobj->externalgradeid = $mapping->externalgradeid;
-        $gradeobj->username = $username;
-        $gradeobj->rawgrade = $grade->rawgrade;
-        $gradeobj->gradegradesid = $grade->id;
+        $gradeobj->rawgrade        = $grade->rawgrade;
+        $gradeobj->gradegradesid   = $grade->id;
         $this->grades[$key] = $gradeobj;
     }
 
@@ -211,7 +221,7 @@ class adhoc_task_gradesync extends \core\task\adhoc_task {
                 $DB->insert_record('gradesync_grades', $grade);
                 $this->log("Inserted grade {$grade->externalclass}/{$grade->externalgradeid} for {$grade->username}", 2);
             }
-            unset($this->grades[$key]);
+            unset($this->existinggrades[$key]);
         }
     }
 
@@ -222,7 +232,7 @@ class adhoc_task_gradesync extends \core\task\adhoc_task {
     protected function delete_grades() {
         global $DB;
 
-        foreach ($this->grades as $grade) {
+        foreach ($this->existinggrades as $grade) {
             if ($grade->id) {
                 $DB->delete_records('gradesync_grades', array('id' => $grade->id));
                 $this->log("Deleted old grade {$grade->externalclass}/{$grade->externalgradeid} for {$grade->username}", 2);
