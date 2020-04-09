@@ -54,21 +54,6 @@ echo "<pre>";
 
 
 
-$courseid = 2;
-$sql = "SELECT *
-      FROM {gradesync_mappings}
-     WHERE courseid = ?
-       AND groupid != 0";
-    $params = array($courseid);
-    $mappings = $DB->get_records_sql($sql, $params);
-    foreach ($mappings as $mapping) {
-        // Get a list of students in the group.
-        $members = array_keys(groups_get_members($mapping->groupid, 'u.id'));
-        var_export($members); exit;
-    }
-
-
-
 
 
 // Final outputs

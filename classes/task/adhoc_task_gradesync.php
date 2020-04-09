@@ -152,7 +152,7 @@ class adhoc_task_gradesync extends \core\task\adhoc_task {
         $grades = $DB->get_records_sql($sql, array('courseid' => $this->courseid));
         foreach ($grades as $grade) {
             $key = $grade->username . '-' . $grade->externalclass . '-' . $grade->externalgradeid;
-            $this->log("Cachning existing grade {$grade->externalclass}/{$grade->externalgradeid} for {$grade->username}", 2);
+            $this->log("Caching existing grade {$grade->externalclass}/{$grade->externalgradeid} for {$grade->username}", 2);
             $this->existinggrades[$key] = $grade;
         }
     }
