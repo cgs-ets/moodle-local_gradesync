@@ -27,9 +27,9 @@
     <TABLE NAME="gradesync_grades" COMMENT="A staging table to store grades based on mappings.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="username" TYPE="char" LENGTH="100" NOTNULL="true"/>
         <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
         <FIELD NAME="groupid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="username" TYPE="char" LENGTH="100" NOTNULL="true"/>
         <FIELD NAME="externalclass" TYPE="char" LENGTH="50" NOTNULL="true"/>
         <FIELD NAME="externalgradeid" TYPE="char" LENGTH="50" NOTNULL="true"/>
         <FIELD NAME="rawgrade" TYPE="char" LENGTH="100" NOTNULL="true"/>
