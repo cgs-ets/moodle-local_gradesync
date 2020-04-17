@@ -52,3 +52,4 @@ $string['map:mappingtitle'] = 'Grade mappings for this course';
 $string['map:overrides'] = 'Override grade mappings for individual classes';
 
 $string['crontask_gradesync'] = 'Sync grades to the staging table';
+$string['gradesyncsetup'] = 'Grade sync setup';

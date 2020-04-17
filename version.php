@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2019090408;
+$plugin->version   = 2019090409;
 $plugin->requires  = 2017111300;
 $plugin->component = 'local_gradesync';
 $plugin->maturity = MATURITY_STABLE;
