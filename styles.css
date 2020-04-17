@@ -72,7 +72,7 @@
   width: 25px;
   height: 25px;
 }
-#local_gradesync-map-root .classes {
+#local_gradesync-map-root #assessment-class {
   margin-bottom: 30px;
 }
 #local_gradesync-map-root .mappings-wrap {
