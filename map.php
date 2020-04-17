@@ -86,7 +86,7 @@ sort($classes);
 
 // Get the current mappings for the course, if available.
 foreach ($extassessments as $i => $assessment) {
-    $extassessments[$i]->mappedto = 0;
+    $extassessments[$i]->mappedto = -1;
     $extassessments[$i]->groupid = 0;
     $sql = "SELECT *
               FROM {gradesync_mappings}
@@ -124,7 +124,7 @@ foreach ($rs as $group) {
     $groupassessments = array();
     foreach ($extassessments as $assessment) {
         $assessment = (array) $assessment;
-        $assessment['mappedto'] = 0;
+        $assessment['mappedto'] = -1;
         $assessment['groupid'] = $group->id;
         $sql = "SELECT *
                   FROM {gradesync_mappings}

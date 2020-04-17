@@ -150,9 +150,20 @@
 #local_gradesync-map-root .overrides .mappings {
   display: none;
   margin-top: 15px;
+  border-bottom: 1px solid #ccc;
 }
 #local_gradesync-map-root .overrides .mappings .assessments {
   border-bottom: 0 none;
+}
+#local_gradesync-map-root .overrides .mappings .assessment[data-mappedto="-1"] select {
+  background-color: #f2f4f6;
+}
+#local_gradesync-map-root .overrides .mappings option {
+  background-color: #fff;
+}
+#local_gradesync-map-root .overrides .mappings option.use-course-mapping {
+  color: #787878;
+  background-color: #f2f2f2;
 }
 @media only screen and (min-width: 1300px) {
   #local_gradesync-map-root .mappings .assessment .info {

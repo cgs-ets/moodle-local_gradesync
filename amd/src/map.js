@@ -76,6 +76,11 @@ define(['jquery', 'core/log', 'core/ajax'],
             self.changeClass();
         });
 
+        // Add the selected value as an attr so that we can apply styles to the select.
+        //self.rootel.find('.gradeitems').each( function(i) {
+        //    $(this).attr('data-selected', select.val());
+        //});
+
         // Detect mapping change.
         self.rootel.on('change', '.gradeitems', function(e) {
             e.preventDefault();
@@ -173,6 +178,9 @@ define(['jquery', 'core/log', 'core/ajax'],
                 gradeitemid: gradeitem
             },
             done: function(response) {
+                // Update the mappedto data attr.
+                //assessment.data('mappedto', gradeitem);
+                assessment.attr('data-mappedto', gradeitem);
                 self.submitting(assessment, 1, 1);
             },
             fail: function(reason) {

@@ -104,8 +104,19 @@
 		.mappings {
 			display: none;
 			margin-top: 15px;
+			border-bottom: 1px solid #ccc;
 			.assessments {
 				border-bottom: 0 none;
+			}
+			.assessment[data-mappedto="-1"] select {
+				background-color: #f2f4f6;
+			}
+			option {
+				background-color: #fff;
+			}
+			option.use-course-mapping {
+				color: #787878;
+				background-color: #f2f2f2;
 			}
 		}
 	}
