@@ -102,7 +102,7 @@ function local_gradesync_extend_navigation_course(navigation_node $parentnode, s
 	    $mappingnode->isexpandable = false;
 	    $mappingnode->jsenabled = false;
 	    $mappingnode->collapse = false;
-	    $parentnode->add_node($mappingnode, 'coursebadges');
+	    $parentnode->add_node($mappingnode, 'gradebooksetup');
 	}
 }
 
