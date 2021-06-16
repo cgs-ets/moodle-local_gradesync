@@ -78,6 +78,10 @@ $externalDB->connect($config->dbhost, $config->dbuser, $config->dbpass, $config-
 // Get the external assessments based on the Moodle course.
 $courseextid = $DB->get_field('course', $config->coursefield, array('id' => $courseid));
 $extassessments = array_values($externalDB->get_records_sql($config->sqlextassessments, array($courseextid)));
+if (empty($extassessments)) {
+    echo "No external assessments found for <b>'" . $courseextid . "'</b> using SQL <b>'" . $config->sqlextassessments ."'</b>";
+    exit;
+}
 
 // Extract and sort distinct assessment codes.
 $classes = array_column($extassessments, 'class');
