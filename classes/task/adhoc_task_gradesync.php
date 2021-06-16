@@ -166,12 +166,11 @@ class adhoc_task_gradesync extends \core\task\adhoc_task {
     protected function cache_grade($studentid, $mapping) {
         global $DB;
 
-        $rawgradene = $DB->sql_isnotempty('grade_grades', 'rawgrade', true, false);
         $sql = "SELECT *
                   FROM {grade_grades}
                  WHERE userid = ?
                   AND  itemid = ?
-                  AND  $rawgradene";
+                  AND  ( NOT (rawgrade = 0) )";
         $params = array(
             $studentid,
             $mapping->gradeitemid,
