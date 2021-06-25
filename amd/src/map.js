@@ -94,6 +94,8 @@ define(['jquery', 'core/log', 'core/ajax'],
             self.changeOverrideGroup();
         });
 
+        self.checkAlerts();
+
     };
 
     /**
@@ -179,9 +181,12 @@ define(['jquery', 'core/log', 'core/ajax'],
             },
             done: function(response) {
                 // Update the mappedto data attr.
-                //assessment.data('mappedto', gradeitem);
+                assessment.data('mappedto', gradeitem);
                 assessment.attr('data-mappedto', gradeitem);
                 self.submitting(assessment, 1, 1);
+                
+                // Check the markoutof.
+                self.checkAlerts();
             },
             fail: function(reason) {
                 self.submitting(assessment, 1, 2);
@@ -191,6 +196,40 @@ define(['jquery', 'core/log', 'core/ajax'],
         }]);
 
     };
+
+    /**
+     * Check the markoutof values.
+     *
+     */
+    Map.prototype.checkAlerts = function (select) {
+        var self = this;
+
+        var assessments = self.rootel.find('.assessment');
+        assessments.each(function() {
+
+            var assessment = $(this);
+
+            // Remove the flag initially.
+            assessment.find('.alerts').html('');
+
+            // Check if mapped.
+            var mappedto = assessment.data('mappedto');
+            if (mappedto == '-1') {
+                console.log('not mapped...');
+                return false;
+            }
+
+            // Get the mapped option.
+            var option = assessment.find('option[value="' + mappedto + '"]');
+            
+            // Check the mark out of.
+            if (assessment.data('markoutof') != option.data('markoutof')) {
+                assessment.find('.alerts').append('<i class="fa fa-exclamation-triangle" aria-hidden="true" data-toggle="tooltip" title="\'Markoutof\' values do not not match. Grades will not be synced."></i>');
+            }
+
+        });
+
+    }
 
     /**
      * Show/hide the loading state

@@ -122,9 +122,17 @@
   padding: 10px;
   float: right;
 }
+#local_gradesync-map-root .mappings .assessment .alerts {
+  padding: 5px 12px;
+  float: left;
+  line-height: 38px;
+}
+#local_gradesync-map-root .mappings .assessment .alerts .fa-exclamation-triangle {
+  color: #ca3120;
+}
 #local_gradesync-map-root .mappings .assessment .spinner {
   display: inline-block;
-  bottom: 20px;
+  bottom: 14px;
   height: 20px;
   width: 20px;
   position: absolute;

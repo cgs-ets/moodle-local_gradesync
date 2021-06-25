@@ -67,7 +67,7 @@ module.exports = function(grunt) {
                     compress: false // We must not compress to keep the comments.
                 },
                 files: {
-                    "styles.css": "less/styles.less",
+                    "gradesync.css": "less/styles.less",
                 }
             }
        },

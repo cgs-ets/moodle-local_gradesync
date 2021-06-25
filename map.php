@@ -46,7 +46,7 @@ require_login();
 require_capability('moodle/course:update', $context, $USER->id); 
 
 // Include page CSS.
-$PAGE->requires->css(new moodle_url($CFG->wwwroot . '/local/gradesync/styles.css', array('nocache' => rand().rand())));
+$PAGE->requires->css(new moodle_url($CFG->wwwroot . '/local/gradesync/gradesync.css', array('nocache' => rand())));
 
 // Output header.
 echo $OUTPUT->header();
@@ -118,6 +118,7 @@ foreach ($rs as $gradeitem) {
     else {
         $gradeitem->itemname .= ' (' . $gradeitem->itemmodule . ')';
     }
+    $gradeitem->markoutof = intval($gradeitem->grademax);
     $gradeitems[] = (array) $gradeitem;
 }
 
@@ -156,7 +157,6 @@ $data = array(
     'has_groups' => (count($groups) > 1),
     'groups' => $groups,
 );
-//echo "<pre>"; var_export($extassessments); exit;
 
 // Output page template.
 echo $OUTPUT->render_from_template('local_gradesync/map', $data);

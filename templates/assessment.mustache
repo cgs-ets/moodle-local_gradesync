@@ -24,7 +24,7 @@
     Gradesync assessment partial.
 }}
 
-<div class="assessment" data-id="{{id}}" data-class="{{class}}" data-groupid="{{groupid}}" data-mappedto="{{mappedto}}">
+<div class="assessment" data-id="{{id}}" data-class="{{class}}" data-groupid="{{groupid}}" data-mappedto="{{mappedto}}" data-markoutof="{{markoutof}}">
     <div class="info">
         <span>{{description1}}</span>
         <span>{{description2}}</span>
@@ -34,8 +34,9 @@
         <select class="gradeitems">
             <option value="-1"></option>
             {{#gradeitems}}
-                <option value="{{id}}">{{itemname}}</option>
+                <option value="{{id}}" data-markoutof="{{markoutof}}">{{itemname}}</option>
             {{/gradeitems}}
         </select>
     </div>
+    <div class="alerts"></div>
 </div>
