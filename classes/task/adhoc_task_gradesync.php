@@ -77,8 +77,8 @@ class adhoc_task_gradesync extends \core\task\adhoc_task {
 
         // Initiate ext db conn.
         $this->config = get_config('local_gradesync');
-        $this->externalDB = \moodle_database::get_driver_instance($config->dbtype, 'native', true);        
-        $this->externalDB->connect($config->dbhost, $config->dbuser, $config->dbpass, $config->dbname, '');
+        $this->externalDB = \moodle_database::get_driver_instance($this->config->dbtype, 'native', true);        
+        $this->externalDB->connect($this->config->dbhost, $this->config->dbuser, $this->config->dbpass, $this->config->dbname, '');
 
         $this->courseid = $this->get_custom_data();
         $this->log_start("Processing grade sync for course {$this->courseid}");
