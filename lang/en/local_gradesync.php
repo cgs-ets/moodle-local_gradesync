@@ -42,8 +42,13 @@ $string['config:dbname'] = 'Database name';
 $string['config:dbuser'] = 'Database user';
 $string['config:dbpass'] = 'Database password';
 $string['config:coursefield'] = 'Course field';
+
 $string['config:sqlextassessments'] = 'External assessments SQL';
-$string['config:sqlextassessments_desc'] = 'The SQL used to fetch assessments from the external system based on a Moodle course code. The SQL is a configurable field because it is unique to the implementation of the external system at your institution. The plugin will execute the SQL and expects the following return values: rownum, class, id, description1, description2, description3. It is passed a single parameter for the external course id. See the README documentation for more information.';
+$string['config:sqlextassessments_desc'] = 'The SQL used to fetch assessments from the external system based on a Moodle course code. The SQL is a configurable field because it is unique to the implementation of the external system at your institution. The plugin will execute the SQL and expects the following return values: rownum, class, id, description1, description2, description3, markoutof. It is passed a single parameter for the external course id. See the README documentation for more information.';
+
+$string['config:sqlextassessment'] = 'External assessment SQL';
+$string['config:sqlextassessment_desc'] = 'The SQL used to fetch a single assessment line from the external system based on the external class code and grade id. The SQL is a configurable field because it is unique to the implementation of the external system at your institution. The plugin will execute the SQL and expects the following return values: rownum, class, id, description1, description2, description3, markoutof. It is passed 2 parameters for the external class code and grade id. See the README documentation for more information.';
+
 $string['missingsettings'] = 'Required settings for local_gradesync are missing.';
 
 $string['map:assessmentclasses'] = 'Multiple related classes were found in {$a}. Please select one to begin mapping grade items.';

@@ -51,6 +51,16 @@ class adhoc_task_gradesync extends \core\task\adhoc_task {
     protected $grades = array();
 
     /**
+     * @var moodle_database.
+     */
+    protected $externalDB = null;
+
+    /**
+     * @var stdClass plugin conig.
+     */
+    protected $config = null;
+
+    /**
      * Get a descriptive name for this task (shown to admins).
      *
      * @return string
@@ -64,6 +74,11 @@ class adhoc_task_gradesync extends \core\task\adhoc_task {
      */
     public function execute() {
         global $DB;
+
+        // Initiate ext db conn.
+        $this->config = get_config('local_gradesync');
+        $this->externalDB = moodle_database::get_driver_instance($config->dbtype, 'native', true);        
+        $this->externalDB->connect($config->dbhost, $config->dbuser, $config->dbpass, $config->dbname, '');
 
         $this->courseid = $this->get_custom_data();
         $this->log_start("Processing grade sync for course {$this->courseid}");
@@ -179,6 +194,14 @@ class adhoc_task_gradesync extends \core\task\adhoc_task {
         
         if (empty($grade)) {
             return;
+        }
+
+        // Check markoutof from both assessment sources and and skip if they do not match.
+        $extassessment = array_values($this->externalDB->get_records_sql($this->config->sqlextassessment, array($mapping->externalclass, $mapping->externalgradeid)));
+        $moodlemarkoutof = intval($grade->grademax);
+        if ($moodlemarkoutof != $extassessment->markoutof) {
+            $this->log("Skipping {$mapping->externalclass}/{$mapping->externalgradeid} because markoutof values do not match: {$moodlemarkoutof} != {$extassessment->markoutof}", 2);
+            continue;
         }
 
         $username = $DB->get_field('user', 'username', array('id' => $studentid));

@@ -111,4 +111,12 @@ if ($hassiteconfig) {
     $setting = new admin_setting_configtextarea($name, $title, $description, $default);
     $settings->add($setting);
 
+    // SQL External Assessment.
+    $name = 'local_gradesync/sqlextassessment';
+    $title = get_string('config:sqlextassessment', 'local_gradesync');
+    $default = 'EXEC usp_get_assessment ? ?';
+    $description = get_string('config:sqlextassessment_desc', 'local_gradesync');
+    $setting = new admin_setting_configtextarea($name, $title, $description, $default);
+    $settings->add($setting);
+
 }

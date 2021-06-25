@@ -59,6 +59,7 @@ if (empty($config->dbtype) ||
     empty($config->dbpass) || 
     empty($config->dbname) || 
     empty($config->sqlextassessments) || 
+    empty($config->sqlextassessment) || 
     empty($config->coursefield)) {
         $notification = new \core\output\notification(
             get_string('missingsettings', 'local_gradesync'),

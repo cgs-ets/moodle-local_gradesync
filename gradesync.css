@@ -123,8 +123,11 @@
   float: right;
 }
 #local_gradesync-map-root .mappings .assessment .alerts {
-  padding: 5px 12px;
   float: left;
+  line-height: 38px;
+}
+#local_gradesync-map-root .mappings .assessment .alerts * {
+  padding: 5px 12px;
   line-height: 38px;
 }
 #local_gradesync-map-root .mappings .assessment .alerts .fa-exclamation-triangle {
@@ -132,7 +135,7 @@
 }
 #local_gradesync-map-root .mappings .assessment .spinner {
   display: inline-block;
-  bottom: 14px;
+  top: 14px;
   height: 20px;
   width: 20px;
   position: absolute;
@@ -141,7 +144,7 @@
 #local_gradesync-map-root .mappings .assessment .icon-result {
   display: inline-block;
   position: absolute;
-  bottom: 12px;
+  top: 14px;
   margin-left: 11px;
   font-size: 13px;
 }
