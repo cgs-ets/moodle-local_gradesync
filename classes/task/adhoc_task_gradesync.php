@@ -197,7 +197,7 @@ class adhoc_task_gradesync extends \core\task\adhoc_task {
         }
 
         // Check markoutof from both assessment sources and and skip if they do not match.
-        $extassessment = array_values($this->externalDB->get_records_sql($this->config->sqlextassessment, array($mapping->externalclass, $mapping->externalgradeid)));
+        $extassessment = array_values($this->externalDB->get_records_sql($this->config->sqlextassessment, array($mapping->externalclass, intval($mapping->externalgradeid))));
         $moodlemarkoutof = intval($grade->grademax);
         if ($moodlemarkoutof != $extassessment->markoutof) {
             $this->log("Skipping {$mapping->externalclass}/{$mapping->externalgradeid} because markoutof values do not match: {$moodlemarkoutof} != {$extassessment->markoutof}", 2);
