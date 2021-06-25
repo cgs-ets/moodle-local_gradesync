@@ -77,7 +77,7 @@ class adhoc_task_gradesync extends \core\task\adhoc_task {
 
         // Initiate ext db conn.
         $this->config = get_config('local_gradesync');
-        $this->externalDB = moodle_database::get_driver_instance($config->dbtype, 'native', true);        
+        $this->externalDB = \moodle_database::get_driver_instance($config->dbtype, 'native', true);        
         $this->externalDB->connect($config->dbhost, $config->dbuser, $config->dbpass, $config->dbname, '');
 
         $this->courseid = $this->get_custom_data();
@@ -201,7 +201,7 @@ class adhoc_task_gradesync extends \core\task\adhoc_task {
         $moodlemarkoutof = intval($grade->grademax);
         if ($moodlemarkoutof != $extassessment->markoutof) {
             $this->log("Skipping {$mapping->externalclass}/{$mapping->externalgradeid} because markoutof values do not match: {$moodlemarkoutof} != {$extassessment->markoutof}", 2);
-            continue;
+            return;
         }
 
         $username = $DB->get_field('user', 'username', array('id' => $studentid));
