@@ -197,16 +197,19 @@ class adhoc_task_gradesync extends \core\task\adhoc_task {
         }
 
         // Check markoutof from both assessment sources and and skip if they do not match.
-        $extassessment = array_values($this->externalDB->get_records_sql($this->config->sqlextassessment, array($mapping->externalclass, intval($mapping->externalgradeid))));
-        $moodlemarkoutof = intval($grade->grademax);
-        if ($moodlemarkoutof != $extassessment->markoutof) {
-            $this->log("Skipping {$mapping->externalclass}/{$mapping->externalgradeid} because markoutof values do not match: {$moodlemarkoutof} != {$extassessment->markoutof}", 2);
+        $gradeitem = $DB->get_record('grade_items', array('id' => $grade->itemid));
+        $extassessment = $this->externalDB->get_record_sql($this->config->sqlextassessment, array($mapping->externalclass, intval($mapping->externalgradeid)));
+        $outofa = intval($gradeitem->grademax);
+        $outofb = intval($extassessment->markoutof);
+        if ($outofa != $outofb) {
+            $this->log("Skipping {$mapping->externalclass}/{$mapping->externalgradeid} because markoutof values do not match: {$outofa} != {$outofb}", 2);
             return;
         }
 
         $username = $DB->get_field('user', 'username', array('id' => $studentid));
         $key = $mapping->externalclass . '-' . $mapping->externalgradeid . '-' . $username;
         $this->log("Caching grade {$mapping->externalclass}/{$mapping->externalgradeid} for {$username}", 2);
+        $this->log("Markoutof matches for {$mapping->externalclass}/{$mapping->externalgradeid}: {$outofa} == {$outofb}", 3);
         $gradeobj = new \stdClass();
         $gradeobj->username        = $username;
         $gradeobj->courseid        = $mapping->courseid;
