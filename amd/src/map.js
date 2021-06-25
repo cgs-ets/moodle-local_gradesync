@@ -224,7 +224,7 @@ define(['jquery', 'core/log', 'core/ajax'],
             
             // Check the mark out of.
             if (assessment.data('markoutof') != option.data('markoutof')) {
-                assessment.find('.alerts').append('<i class="fa fa-exclamation-triangle" aria-hidden="true" data-toggle="tooltip" title="\'Markoutof\' values do not not match. Grades will not be synced."></i>');
+                assessment.find('.alerts').append('<i class="fa fa-exclamation-triangle" aria-hidden="true" data-toggle="tooltip" title="\'Markoutof\' values do not match. Grades will not be synced."></i>');
             }
 
         });
