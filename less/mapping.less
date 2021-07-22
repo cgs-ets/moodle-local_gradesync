@@ -65,15 +65,15 @@
 			    }
 			}
 			.selection {
-				display: inline-block;
 				padding: 10px;
 				float: right;
 			}
 			.alerts {
 			    float: left;
 			    line-height: 38px;
+				margin-left: 10px;
 			    * {
-			    	padding: 5px 12px;
+			    	//padding: 5px 12px;
 			    	line-height: 38px;
 			    }
 			    .fa-exclamation-triangle {
@@ -87,21 +87,39 @@
 			    width: 20px;
 			    position: absolute;
 			    margin: 0 0 0 10px;
+
+				top: 6px;
+    			right: 7px;
+
 			}
 			.icon-result {
-			    display: inline-block;
+			    /*display: inline-block;
 			    position: absolute;
 			    top: 14px;
     			margin-left: 11px;
-    			font-size: 13px;
+    			font-size: 13px;*/
+				
+				display: inline-block;
+				position: absolute;
+				top: 1px;
+				font-size: 12px;
+				right: 4px;
+
     			i {
 					color: green;
-			    	font-size: 18px;
+			    	//font-size: 18px;
+			    	font-size: 16px;
     			}
 			}
 			.icon-result-error {
 				i {
 					color: red;
+				}
+			}
+			&.submitting {
+				select {
+					pointer-events: none;
+    				background: #eee;
 				}
 			}
 		}
@@ -152,6 +170,9 @@
 					width: auto;
 					float: left;
 				}
+				.alerts {
+					margin: 0;
+				}
 			}
 		}
 	}
@@ -180,6 +201,7 @@
 	    -webkit-transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 	    -o-transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 	    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+		outline: none;
 	}
 
 }

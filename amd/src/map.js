@@ -170,6 +170,10 @@ define(['jquery', 'core/log', 'core/ajax'],
         var groupid = assessment.data('groupid');
         var gradeitem = select.val();
 
+        // Update the mappedto data attr.
+        assessment.data('mappedto', gradeitem);
+        assessment.attr('data-mappedto', gradeitem);
+
         Ajax.call([{
             methodname: 'local_gradesync_save_mapping',
             args: { 
@@ -180,9 +184,6 @@ define(['jquery', 'core/log', 'core/ajax'],
                 gradeitemid: gradeitem
             },
             done: function(response) {
-                // Update the mappedto data attr.
-                assessment.data('mappedto', gradeitem);
-                assessment.attr('data-mappedto', gradeitem);
                 self.submitting(assessment, 1, 1);
                 
                 // Check the markoutof.
@@ -208,6 +209,7 @@ define(['jquery', 'core/log', 'core/ajax'],
         assessments.each(function() {
 
             var assessment = $(this);
+            //console.log('checking alerts for ' + assessment.data('id'));
 
             // Remove the flag initially.
             assessment.find('.alerts').html('');
@@ -216,7 +218,7 @@ define(['jquery', 'core/log', 'core/ajax'],
             var mappedto = assessment.data('mappedto');
             if (mappedto == '-1') {
                 console.log('not mapped...');
-                return false;
+                return; // continue.
             }
 
             // Get the mapped option.
@@ -224,7 +226,7 @@ define(['jquery', 'core/log', 'core/ajax'],
             
             // Check the mark out of.
             if (assessment.data('markoutof') != option.data('markoutof')) {
-                assessment.find('.alerts').append('<i class="fa fa-exclamation-triangle" aria-hidden="true" data-toggle="tooltip" title="\'Markoutof\' values do not match. Grades will not be synced."></i>');
+                assessment.find('.alerts').append('<span style="font-size: 85%;"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> \'Markoutof\' values do not match. Grades will not be synced</span>');
             }
 
         });
@@ -259,6 +261,7 @@ define(['jquery', 'core/log', 'core/ajax'],
         if (finished) {
             assessment.find('#submitspinner-' + assessmentid).remove();
             self.rootel.removeClass('submitting');
+            assessment.removeClass('submitting');
             if (result == 1) {
                 assessment.append('<div style="display: none;" id="result-' + assessmentid + '" class="icon-result icon-result-success"><i class="fa fa-check" aria-hidden="true"></i> Changes saved</div>');
             } else if (result == 2) {
@@ -266,7 +269,9 @@ define(['jquery', 'core/log', 'core/ajax'],
             }
             assessment.find('#result-' + assessmentid).fadeIn(200).delay(2000).fadeOut(200, function() {$(this).remove()});
         } else {
+            assessment.find('#result-' + assessmentid).remove();
             self.rootel.addClass('submitting');
+            assessment.addClass('submitting');
             assessment.append('<div id="submitspinner-' + assessmentid + '" class="spinner"><div class="circle spin"></div></div>');
         }
     };

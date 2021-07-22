@@ -118,16 +118,15 @@
   margin-right: 7px;
 }
 #local_gradesync-map-root .mappings .assessment .selection {
-  display: inline-block;
   padding: 10px;
   float: right;
 }
 #local_gradesync-map-root .mappings .assessment .alerts {
   float: left;
   line-height: 38px;
+  margin-left: 10px;
 }
 #local_gradesync-map-root .mappings .assessment .alerts * {
-  padding: 5px 12px;
   line-height: 38px;
 }
 #local_gradesync-map-root .mappings .assessment .alerts .fa-exclamation-triangle {
@@ -140,20 +139,31 @@
   width: 20px;
   position: absolute;
   margin: 0 0 0 10px;
+  top: 6px;
+  right: 7px;
 }
 #local_gradesync-map-root .mappings .assessment .icon-result {
+  /*display: inline-block;
+			    position: absolute;
+			    top: 14px;
+    			margin-left: 11px;
+    			font-size: 13px;*/
   display: inline-block;
   position: absolute;
-  top: 14px;
-  margin-left: 11px;
-  font-size: 13px;
+  top: 1px;
+  font-size: 12px;
+  right: 4px;
 }
 #local_gradesync-map-root .mappings .assessment .icon-result i {
   color: green;
-  font-size: 18px;
+  font-size: 16px;
 }
 #local_gradesync-map-root .mappings .assessment .icon-result-error i {
   color: red;
+}
+#local_gradesync-map-root .mappings .assessment.submitting select {
+  pointer-events: none;
+  background: #eee;
 }
 #local_gradesync-map-root .overrides.loading .spinner {
   display: block;
@@ -194,6 +204,9 @@
     width: auto;
     float: left;
   }
+  #local_gradesync-map-root .mappings .assessment .alerts {
+    margin: 0;
+  }
 }
 #local_gradesync-map-root.loading .classes .spinner {
   display: block;
@@ -215,4 +228,5 @@
   -webkit-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   -o-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  outline: none;
 }
