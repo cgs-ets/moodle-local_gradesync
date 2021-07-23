@@ -219,6 +219,7 @@ class adhoc_task_gradesync extends \core\task\adhoc_task {
         $gradeobj->externalgradeid = $mapping->externalgradeid;
         $gradeobj->rawgrade        = $grade->rawgrade;
         $gradeobj->gradegradesid   = $grade->id;
+        $gradeobj->lastmodified    = $grade->timemodified;
         $this->grades[$key] = $gradeobj;
     }
 
