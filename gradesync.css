@@ -117,6 +117,19 @@
   display: inline-block;
   margin-right: 7px;
 }
+#local_gradesync-map-root .mappings .assessment .info .markoutof {
+  text-align: center;
+}
+#local_gradesync-map-root .mappings .assessment:first-child .info .markoutof:before {
+  content: "Mark out of";
+  font-size: 10px;
+  top: -3px;
+  left: -63px;
+  position: absolute;
+  text-transform: uppercase;
+  font-weight: 600;
+  width: 200px;
+}
 #local_gradesync-map-root .mappings .assessment .selection {
   padding: 10px;
   float: right;
