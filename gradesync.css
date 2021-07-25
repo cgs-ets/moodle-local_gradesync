@@ -119,6 +119,7 @@
 }
 #local_gradesync-map-root .mappings .assessment .info .markoutof {
   text-align: center;
+  position: relative;
 }
 #local_gradesync-map-root .mappings .assessment:first-child .info .markoutof:before {
   content: "Mark out of";
